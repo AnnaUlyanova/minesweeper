@@ -7,55 +7,78 @@ var board = {
 row: 0,
 col: 0,
 isMine: false,
-hidden: true
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
 },
 {
 row: 0,
 col: 1,
 isMine: true,
-hidden: true
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
 },
 {
 row: 0,
 col: 2,
 isMine: false,
-hidden: true
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
+
 },
 {
 row: 1,
 col: 0,
 isMine: false,
-hidden: true
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
+
 },
 {
 row: 1,
 col: 1,
-isMine: false,
-hidden: true
+isMine: true,
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
 },
 {
 row: 1,
 col: 2,
 isMine: false,
-hidden: true
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
+
 },
 {
 row: 2,
 col: 0,
 isMine: false,
-hidden: true
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
 },
 {
 row: 2,
 col: 1,
-isMine: true,
-hidden: true
+isMine: false,
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
+
 },
 {
 row: 2,
 col: 2,
 isMine: true,
-hidden: true
+  isMarked: false,
+  hidden: true,
+  surroundingMines: 2
+
 }
 ]
 };
@@ -63,9 +86,11 @@ hidden: true
 
 function startGame () {
   // Don't remove this function call: it makes the game work!
+  for (var i = 0; i < board.cells.length; i++){
+  board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
+  };
   lib.initBoard()
 }
-
 // Define this function to look for a win condition:
 //
 // 1. Are all of the cells that are NOT mines visible?
@@ -86,4 +111,12 @@ function checkForWin () {
 // It will return cell objects in an array. You should loop through
 // them, counting the number of times `cell.isMine` is true.
 function countSurroundingMines (cell) {
+  count = 0;
+  var surroundingCells = getSurroundingCells(cell.row, cell.col);
+  for (var i = 0; i < surroundingCells.length; i++){
+    if (surroundingCells[i].isMine === true) {
+      count += 1;
+        }
+    }
+return count;
 }
