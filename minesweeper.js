@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
 
-var boardSize = prompt("Please select board size: 3, 4 or 5");
+var boardSize = prompt("What board size would you like to play? Please enter any number from 3 to 6.");
 
 var board = {
 cells: []
@@ -68,17 +68,42 @@ cells: []
 
 function startGame () {
   // Don't remove this function call: it makes the game work!
+  while (boardSize < 3 || boardSize > 6 || boardSize === NaN) {
+    boardSize = prompt("Please any number from 3 to 6");
+  };
 
+  createBoard();
+randomizeMines();
+  for (var i = 0; i < board.cells.length; i++){
+  board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
+  };
 
+  lib.initBoard();
+
+    // Next, we add an event listener to it:
+    document.addEventListener('click',checkForWin);
+  document.addEventListener('contextmenu',checkForWin);
+}
+
+//function to create a random number of mines
+
+function randomizeMines (){
+  var pointer = Math.random();
+  if (pointer < 0.3) {
+  return true;
+  }
+  return false;
+}
+
+// function to Create a Board
 function createBoard() {
   for (var i = 0; i < boardSize; i++) {
     for (var j = 0; j < boardSize; j++) {
-      board.cells.push (
+      board.cells.push(
         {
           row: i,
           col: j,
-          isMine: false,
-        isMarked: false,
+          isMine: randomizeMines(),
         hidden: true
         }
       )
@@ -87,18 +112,6 @@ function createBoard() {
 }
 
 
-  for (var i = 0; i < board.cells.length; i++){
-  board.cells[i].surroundingMines = countSurroundingMines(board.cells[i]);
-  };
-  lib.initBoard();
-
-    // Next, we add an event listener to it:
-    document.addEventListener('click',checkForWin);
-  document.addEventListener('contextmenu',checkForWin);
-
-createBoard();
-
-}
 // Define this function to look for a win condition:
 //
 // 1. Are all of the cells that are NOT mines visible?
@@ -115,6 +128,7 @@ for (var i = 0; i < board.cells.length; i++) {
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
 lib.displayMessage('You win!')
+  audio.play();
 }
 
 // Define this function to count the number of mines around the cell
@@ -135,3 +149,5 @@ function countSurroundingMines (cell) {
     }
 return count;
 }
+
+var audio = new Audio("audio/Cardinal-bird-call.mp3");
